@@ -1,13 +1,20 @@
 import { useState } from 'react'
-import { Play, Sparkles, BookOpen, Wrench, ShieldCheck, ChevronRight } from 'lucide-react'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Play, Sparkles, BookOpen, Wrench, ShieldCheck, ChevronRight, LogOut, User } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useAuth } from './context/AuthContext'
+import Login from './pages/Login'
+import ContentPage from './pages/ContentPage'
 import './App.css'
 
-function App() {
+function LandingPage() {
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
     return (
         <div className="app-container">
             <nav className="navbar">
-                <div className="logo">
+                <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
                     <Sparkles className="icon-gold" />
                     <span>Learn <strong>VerveAI</strong></span>
                 </div>
@@ -15,7 +22,14 @@ function App() {
                     <a href="#courses">Courses</a>
                     <a href="#tools">AI Tools</a>
                     <a href="#guides">Guides</a>
-                    <button className="btn-premium">Subscribe</button>
+                    {user ? (
+                        <div className="user-menu">
+                            <span className="user-email"><User size={16} /> {user.email}</span>
+                            <button onClick={logout} className="btn-icon"><LogOut size={18} /></button>
+                        </div>
+                    ) : (
+                        <Link to="/login" className="btn-premium">Login</Link>
+                    )}
                 </div>
             </nav>
 
@@ -36,30 +50,43 @@ function App() {
                     </motion.div>
                 </header>
 
-                <section className="features-grid">
-                    <div className="feature-card">
+                <section id="courses" className="features-grid">
+                    <Link to="/content/llm-mastery" className="feature-card clickable">
                         <BookOpen className="icon" />
-                        <h3>Premium Courses</h3>
+                        <h3>LLM Mastery</h3>
                         <p>Deep dives into LLMs, Image Synthesis, and AI Workflow automation.</p>
-                    </div>
-                    <div className="feature-card">
+                        <span className="card-action">Start Learning <ChevronRight size={16} /></span>
+                    </Link>
+                    <Link to="/content/ai-tools-pro" className="feature-card clickable">
                         <Wrench className="icon" />
-                        <h3>Pro-Grade Tools</h3>
+                        <h3>AI Tools Pro</h3>
                         <p>Curated list of the best AI tools, battle-tested by industry experts.</p>
-                    </div>
-                    <div className="feature-card">
+                        <span className="card-action">View Tools <ChevronRight size={16} /></span>
+                    </Link>
+                    <Link to="/content/video-implementation" className="feature-card clickable">
                         <Play className="icon" />
                         <h3>Video Guides</h3>
                         <p>Step-by-step tutorials on implementing AI into your business.</p>
-                    </div>
+                        <span className="card-action">Watch Now <ChevronRight size={16} /></span>
+                    </Link>
                 </section>
 
                 <section className="subscription-hook">
                     <div className="glass-card">
                         <ShieldCheck className="icon-gold" />
-                        <h2>Unlock Full Access</h2>
-                        <p>Join 10,000+ professionals learning to lead with AI.</p>
-                        <button className="btn-premium-large">Get Started Now <ChevronRight /></button>
+                        {user ? (
+                            <>
+                                <h2>Ready to Expand?</h2>
+                                <p>Unlock all premium content with our free starter plan.</p>
+                                <Link to="/content/starter-guide" className="btn-premium-large">Go to Dashboard <ChevronRight /></Link>
+                            </>
+                        ) : (
+                            <>
+                                <h2>Unlock Full Access</h2>
+                                <p>Join 10,000+ professionals learning to lead with AI.</p>
+                                <Link to="/login" className="btn-premium-large">Get Started Now <ChevronRight /></Link>
+                            </>
+                        )}
                     </div>
                 </section>
             </main>
@@ -68,6 +95,16 @@ function App() {
                 <p>&copy; 2024 VerveAI. All rights reserved.</p>
             </footer>
         </div>
+    )
+}
+
+function App() {
+    return (
+        <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/content/:slug" element={<ContentPage />} />
+        </Routes>
     )
 }
 
