@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "verveai-f7819"
+  },
+  "targets": {
+    "verveai-f7819": {
+      "hosting": {
+        "learn": [
+          "learn-verveai"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
