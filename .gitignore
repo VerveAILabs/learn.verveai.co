@@ -1,3 +1,4 @@
+
 # Logs
 logs
 *.log
@@ -64,6 +65,9 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env.development
+.env.local
+.env.*.local
 
 # dataconnect generated files
 .dataconnect

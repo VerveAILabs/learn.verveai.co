@@ -47,7 +47,11 @@ const ContentPage = () => {
                     className="content-header"
                 >
                     <span className="content-type-badge">PREMIUM GUIDE</span>
-                    <h1>{slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</h1>
+                    <h1>{slug.split('-').map(word => {
+                        if (word.toLowerCase() === 'llm') return 'LLM';
+                        if (word.toLowerCase() === 'ai') return 'AI';
+                        return word.charAt(0).toUpperCase() + word.slice(1);
+                    }).join(' ')}</h1>
                     <p>Unlock the full potential of AI with this expert-led deep dive.</p>
                 </motion.header>
 
